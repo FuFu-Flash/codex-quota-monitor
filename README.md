@@ -11,9 +11,21 @@
 
 ## 界面
 
+### ChatGPT Plus
+
+Plus 通常返回 5 小时与每周两个额度窗口，因此 A / B / C 布局都会同时呈现短期和长期额度。
+
 | A · 原生清单 | B · 双环仪表 | C · 预测 HUD |
 | --- | --- | --- |
-| ![原生清单布局](docs/images/layout-a.png) | ![双环仪表布局](docs/images/layout-b.png) | ![预测 HUD 布局](docs/images/layout-c.png) |
+| ![Plus 原生清单布局](docs/images/layout-a-plus.png) | ![Plus 双环仪表布局](docs/images/layout-b-plus.png) | ![Plus 预测 HUD 布局](docs/images/layout-c-plus.png) |
+
+### ChatGPT Pro
+
+Pro 当前可能只返回一个每周额度窗口；此时界面只展示服务端真实返回的一项，不会补画不存在的 `0%`。
+
+| A · 原生清单 | B · 单环仪表 | C · 预测 HUD |
+| --- | --- | --- |
+| ![Pro 原生清单布局](docs/images/layout-a.png) | ![Pro 单环仪表布局](docs/images/layout-b.png) | ![Pro 预测 HUD 布局](docs/images/layout-c.png) |
 
 鼠标移入悬浮窗后，可以直接切换 A / B / C 布局。窗口支持深色、浅色和跟随 Codex/系统主题。
 
