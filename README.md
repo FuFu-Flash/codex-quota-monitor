@@ -1,4 +1,4 @@
-# Codex Quota Monitor
+# Codex额度悬浮窗 Codex Quota Monitor
 
 [![Windows](https://img.shields.io/badge/Windows-10%20%2F%2011-0078D4?logo=windows)](https://www.microsoft.com/windows)
 [![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
