@@ -5,7 +5,7 @@
 [![Release](https://img.shields.io/github/v/release/FuFu-Flash/codex-quota-monitor)](https://github.com/FuFu-Flash/codex-quota-monitor/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-一个跟随 Codex Desktop 启动的 Windows 原生悬浮窗，在屏幕右下角实时显示套餐实际返回的额度窗口、缓存命中率与模型输出速度。Plus 通常有 5 小时与每周额度；Pro 可能只返回每周额度。
+一个跟随 ChatGPT 启动的 Windows 原生悬浮窗，在屏幕右下角实时显示套餐实际返回的额度窗口、缓存命中率与模型输出速度。Plus 通常有 5 小时与每周额度；Pro 可能只返回每周额度。
 
 不需要 API Key，不读取浏览器 Cookie。额度通过 Codex App Server 获取，token 遥测来自本机 Codex 会话记录。
 
@@ -32,13 +32,13 @@ Pro 当前只返回一个每周额度窗口。
 ## 功能
 
 - 按套餐实际返回 5 小时/每周额度、重置倒计时与套餐标识
-- 登录状态失效时自动重启 App Server 并刷新 ChatGPT 会话
+- 登录状态失效时自动重启 App Server 并刷新 ChatGPT 登录会话
 - 缓存命中率：`cached input tokens / input tokens`
 - 输出速度：最近一次模型响应的平均 `output tokens / second`
 - 本地消耗速度与预计耗尽时间
 - 当前 ChatGPT 账号头像作为托盘图标
 - 低额度通知、手动刷新、显示/隐藏与多显示器位置记忆
-- 随 Codex 会话启动，不常驻污染任务栏
+- 随 Codex 会话启动，不会长期占用任务栏空间
 - 三套可切换紧凑布局
 
 > Codex 在响应检查点写入 token 使用记录，因此 `tok/s` 是最近一次已完成模型响应的端到端平均值，不是逐字符瞬时速度。没有可靠样本时显示 `—`。
@@ -47,16 +47,16 @@ Pro 当前只返回一个每周额度窗口。
 
 1. 从 [Releases](https://github.com/FuFu-Flash/codex-quota-monitor/releases/latest) 下载 `Setup.exe`。
 2. 运行安装程序。
-3. 打开或重新启动 Codex Desktop。
+3. 打开或重新启动 ChatGPT 客户端。
 
-系统要求：Windows 10/11 x64，Codex Desktop 已登录 ChatGPT。
+系统要求：Windows 10/11 x64，并已登录支持 Codex 的 ChatGPT 账号。
 
 当前安装包尚未使用商业代码签名证书签名。Windows SmartScreen 可能显示“未知发布者”；请从本仓库 Release 下载并核对 Release 中的 SHA-256。
 
 ## 工作方式与隐私
 
 ```text
-Codex Desktop
+ChatGPT
    ├─ App Server ────────> 套餐实际返回的额度窗口
    └─ 本机会话 JSONL ───> 缓存命中率 / 输出 tok/s
                               │
