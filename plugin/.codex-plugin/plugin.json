@@ -1,0 +1,22 @@
+{
+  "name": "codex-quota-monitor",
+  "version": "1.0.0+codex.20260925085329",
+  "description": "Show live Codex limits, cache hit rate, and output speed in a native Windows overlay.",
+  "author": {
+    "name": "Codex Quota Monitor"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codex Quota Monitor",
+    "shortDescription": "Live Codex limits and token telemetry on Windows.",
+    "longDescription": "Starts a lightweight Windows overlay with Codex, reads authenticated limits through the official Codex App Server, and shows cache-hit percentage plus output tokens per second across three switchable compact layouts.",
+    "developerName": "Codex Quota Monitor",
+    "category": "Productivity",
+    "capabilities": [
+      "Windows desktop overlay",
+      "Codex App Server usage",
+      "Local session token telemetry"
+    ],
+    "defaultPrompt": "Show my Codex quota monitor and explain the current limits."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "description": "Start the Codex quota overlay when a Codex session starts or resumes.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "true",
+            "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command \"& (Join-Path $env:PLUGIN_ROOT 'scripts\\start-monitor.ps1')\"",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

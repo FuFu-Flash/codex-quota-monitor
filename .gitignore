@@ -1,0 +1,29 @@
+# Build output
+**/bin/
+**/obj/
+artifacts/
+monitor-publish/
+release/
+dist/
+installer-src/CodexQuotaMonitorSetup/payload.zip
+plugin/assets/app/*.exe
+
+# Reconstruction and prototype scratch files
+decompiled-bundle/
+.tools/
+prototype-screens/
+prototype-server.js
+quota-widget.prototype.html
+package.json
+*-preview.png
+tray-preview*.png
+qa-token-telemetry*.png
+codex-quota-monitor-final.png
+
+# Local/editor files
+.vs/
+.vscode/
+*.user
+*.suo
+*.pdb
+*.log
