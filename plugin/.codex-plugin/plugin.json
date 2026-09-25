@@ -1,6 +1,6 @@
 {
   "name": "codex-quota-monitor",
-  "version": "1.0.1+codex.20260925101045",
+  "version": "1.0.2+codex.20260925120130",
   "description": "Show live Codex limits, cache hit rate, and output speed in a native Windows overlay.",
   "author": {
     "name": "Codex Quota Monitor"

@@ -940,8 +940,6 @@ internal sealed class MainWindow : Window
 		if (_snapshot.ShortWindow != null && _snapshot.LongWindow == null)
 		{
 			stackPanel2.Children.Add(Text(PlanBadgeText() ?? "单窗口", 19.0, _palette.Green, FontWeights.Bold));
-			stackPanel2.Children.Add(Text("当前仅一个额度窗口", 7.5, _palette.Muted, FontWeights.Normal, new Thickness(0.0, 4.0, 0.0, 0.0)));
-			stackPanel2.Children.Add(Text("不显示不存在的 0%", 7.0, _palette.Faint, FontWeights.Normal, new Thickness(0.0, 5.0, 0.0, 0.0)));
 		}
 		else
 		{

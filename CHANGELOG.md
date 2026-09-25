@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.2 — 2026-09-25
+
+- Removed the two redundant gray explanatory lines from the Pro single-window HUD while retaining the green `PRO` label.
+- Updated the Pro HUD screenshot in the README.
+
 ## v1.0.1 — 2026-09-25
 
 - Fixed stale App Server authentication after upgrading to ChatGPT Pro.
