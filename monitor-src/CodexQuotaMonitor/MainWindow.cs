@@ -492,6 +492,11 @@ internal sealed class MainWindow : Window
 			Margin = new Thickness(0.0, 0.0, 7.0, 0.0)
 		});
 		stackPanel.Children.Add(Text("Codex 额度", 11.0, _palette.Text, FontWeights.SemiBold));
+		string? planBadge = PlanBadgeText();
+		if (planBadge != null)
+		{
+			stackPanel.Children.Add(Text(planBadge, 7.5, _palette.Green, FontWeights.Bold, new Thickness(7.0, 1.0, 0.0, 0.0)));
+		}
 		if (_snapshot.IsStale)
 		{
 			stackPanel.Children.Add(Text("离线", 8.0, _palette.Warning, FontWeights.SemiBold, new Thickness(7.0, 1.0, 0.0, 0.0)));
@@ -599,7 +604,9 @@ internal sealed class MainWindow : Window
 			}
 		};
 		Grid element = CreateMetricRow(_snapshot.ShortWindow, "5 小时");
-		Grid element2 = CreateMetricRow(_snapshot.LongWindow, "每周");
+		Grid element2 = _snapshot.ShortWindow != null && _snapshot.LongWindow == null
+			? CreateSingleWindowNote()
+			: CreateMetricRow(_snapshot.LongWindow, "每周");
 		Grid.SetRow(element, 0);
 		Grid.SetRow(element2, 1);
 		obj.Children.Add(element);
@@ -634,6 +641,30 @@ internal sealed class MainWindow : Window
 		Grid.SetRow(grid, 2);
 		obj.Children.Add(grid);
 		return obj;
+	}
+
+	private Grid CreateSingleWindowNote()
+	{
+		Grid grid = new Grid
+		{
+			Height = 34.0,
+			Margin = new Thickness(0.0, 0.0, 0.0, 3.0)
+		};
+		grid.Children.Add(new Border
+		{
+			CornerRadius = new CornerRadius(7.0),
+			Background = _palette.Track
+		});
+		StackPanel content = new StackPanel
+		{
+			Orientation = System.Windows.Controls.Orientation.Horizontal,
+			VerticalAlignment = VerticalAlignment.Center,
+			Margin = new Thickness(9.0, 0.0, 9.0, 0.0)
+		};
+		content.Children.Add(Text(PlanBadgeText() ?? "当前套餐", 8.0, _palette.Green, FontWeights.Bold));
+		content.Children.Add(Text("仅返回一个额度窗口", 8.0, _palette.Muted, FontWeights.Normal, new Thickness(7.0, 0.0, 0.0, 0.0)));
+		grid.Children.Add(content);
+		return grid;
 	}
 
 	private Grid CreateMetricRow(RateWindow? window, string fallback)
@@ -708,24 +739,29 @@ internal sealed class MainWindow : Window
 				}
 			}
 		};
-		Grid grid = new Grid
+		Grid grid = new Grid();
+		if (_snapshot.ShortWindow != null && _snapshot.LongWindow == null)
 		{
-			ColumnDefinitions =
+			Grid singleGauge = CreateGaugeCard(_snapshot.ShortWindow, "额度");
+			singleGauge.Width = 190.0;
+			singleGauge.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+			grid.Children.Add(singleGauge);
+		}
+		else
+		{
+			grid.ColumnDefinitions.Add(new ColumnDefinition
 			{
-				new ColumnDefinition
-				{
-					Width = new GridLength(1.0, GridUnitType.Star)
-				},
-				new ColumnDefinition
-				{
-					Width = new GridLength(1.0, GridUnitType.Star)
-				}
-			},
-			Children = { (UIElement)CreateGaugeCard(_snapshot.ShortWindow, "5 小时") }
-		};
-		Grid element = CreateGaugeCard(_snapshot.LongWindow, "每周");
-		Grid.SetColumn(element, 1);
-		grid.Children.Add(element);
+				Width = new GridLength(1.0, GridUnitType.Star)
+			});
+			grid.ColumnDefinitions.Add(new ColumnDefinition
+			{
+				Width = new GridLength(1.0, GridUnitType.Star)
+			});
+			grid.Children.Add(CreateGaugeCard(_snapshot.ShortWindow, "5 小时"));
+			Grid element = CreateGaugeCard(_snapshot.LongWindow, "每周");
+			Grid.SetColumn(element, 1);
+			grid.Children.Add(element);
+		}
 		obj.Children.Add(grid);
 		Border border = new Border
 		{
@@ -901,10 +937,19 @@ internal sealed class MainWindow : Window
 		{
 			VerticalAlignment = VerticalAlignment.Center
 		};
-		double num = _snapshot.LongWindow?.RemainingPercent ?? 0.0;
-		stackPanel2.Children.Add(Text(((object)_snapshot.LongWindow == null) ? "--" : DisplayText.Percent(num), 19.0, QuotaBrush(num), FontWeights.Bold));
-		stackPanel2.Children.Add(Text("每周额度剩余", 7.5, _palette.Muted, FontWeights.Normal, new Thickness(0.0, 4.0, 0.0, 0.0)));
-		stackPanel2.Children.Add(Text(((object)_snapshot.LongWindow == null) ? "等待数据" : DisplayText.Until(_snapshot.LongWindow.ResetsAt), 7.0, _palette.Faint, FontWeights.Normal, new Thickness(0.0, 5.0, 0.0, 0.0)));
+		if (_snapshot.ShortWindow != null && _snapshot.LongWindow == null)
+		{
+			stackPanel2.Children.Add(Text(PlanBadgeText() ?? "单窗口", 19.0, _palette.Green, FontWeights.Bold));
+			stackPanel2.Children.Add(Text("当前仅一个额度窗口", 7.5, _palette.Muted, FontWeights.Normal, new Thickness(0.0, 4.0, 0.0, 0.0)));
+			stackPanel2.Children.Add(Text("不显示不存在的 0%", 7.0, _palette.Faint, FontWeights.Normal, new Thickness(0.0, 5.0, 0.0, 0.0)));
+		}
+		else
+		{
+			double num = _snapshot.LongWindow?.RemainingPercent ?? 0.0;
+			stackPanel2.Children.Add(Text(((object)_snapshot.LongWindow == null) ? "--" : DisplayText.Percent(num), 19.0, QuotaBrush(num), FontWeights.Bold));
+			stackPanel2.Children.Add(Text("每周额度剩余", 7.5, _palette.Muted, FontWeights.Normal, new Thickness(0.0, 4.0, 0.0, 0.0)));
+			stackPanel2.Children.Add(Text(((object)_snapshot.LongWindow == null) ? "等待数据" : DisplayText.Until(_snapshot.LongWindow.ResetsAt), 7.0, _palette.Faint, FontWeights.Normal, new Thickness(0.0, 5.0, 0.0, 0.0)));
+		}
 		border.Child = stackPanel2;
 		Grid.SetColumn(border, 1);
 		grid.Children.Add(border);
@@ -1121,6 +1166,20 @@ internal sealed class MainWindow : Window
 		}
 		int value = Math.Max(1, (int)(DateTimeOffset.Now - _snapshot.FetchedAt).TotalMinutes);
 		return $"{value} 分钟前";
+	}
+
+	private string? PlanBadgeText()
+	{
+		string? plan = _snapshot.PlanType?.Trim().ToLowerInvariant();
+		return plan switch
+		{
+			"pro" or "prolite" => "PRO",
+			"plus" => "PLUS",
+			"business" or "team" => "BUSINESS",
+			"enterprise" => "ENTERPRISE",
+			"edu" => "EDU",
+			_ => null
+		};
 	}
 
 	private TextBlock Text(string value, double size, System.Windows.Media.Brush brush, FontWeight? weight = null, Thickness? margin = null, bool wrap = false)
@@ -1531,6 +1590,7 @@ internal sealed class MainWindow : Window
 			ok = true,
 			variant = _settings.Variant,
 			theme = _settings.Theme,
+			planType = _snapshot.PlanType,
 			stale = _snapshot.IsStale,
 			fetchedAt = _snapshot.FetchedAt,
 			shortWindow = WindowStatus(_snapshot.ShortWindow),

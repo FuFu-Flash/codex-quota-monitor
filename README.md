@@ -5,7 +5,7 @@
 [![Release](https://img.shields.io/github/v/release/FuFu-Flash/codex-quota-monitor)](https://github.com/FuFu-Flash/codex-quota-monitor/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-一个跟随 Codex Desktop 启动的 Windows 原生悬浮窗，在屏幕右下角实时显示 5 小时额度、每周额度、缓存命中率与模型输出速度。
+一个跟随 Codex Desktop 启动的 Windows 原生悬浮窗，在屏幕右下角实时显示套餐实际返回的额度窗口、缓存命中率与模型输出速度。Plus 通常有 5 小时与每周额度；Pro 可能只返回每周额度。
 
 不需要 API Key，不读取浏览器 Cookie。额度通过 Codex App Server 获取，token 遥测来自本机 Codex 会话记录。
 
@@ -19,7 +19,8 @@
 
 ## 功能
 
-- 5 小时与每周额度、重置倒计时
+- 按套餐实际返回 5 小时/每周额度、重置倒计时与套餐标识
+- 登录状态失效时自动重启 App Server 并刷新 ChatGPT 会话
 - 缓存命中率：`cached input tokens / input tokens`
 - 输出速度：最近一次模型响应的平均 `output tokens / second`
 - 本地消耗速度与预计耗尽时间
@@ -44,7 +45,7 @@
 
 ```text
 Codex Desktop
-   ├─ App Server ────────> 5 小时 / 每周额度
+   ├─ App Server ────────> 套餐实际返回的额度窗口
    └─ 本机会话 JSONL ───> 缓存命中率 / 输出 tok/s
                               │
                               ▼

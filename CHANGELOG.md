@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.1 — 2026-09-25
+
+- Fixed stale App Server authentication after upgrading to ChatGPT Pro.
+- Added one-time automatic App Server restart and ChatGPT token refresh on authentication failures.
+- Fixed Pro single-window layouts so they no longer render a nonexistent second weekly gauge at 0%.
+- Added plan badges and exposed `planType` in local status output.
+
 ## v1.0.0 — 2026-09-25
 
 - Added native Windows quota overlay with three switchable layouts.

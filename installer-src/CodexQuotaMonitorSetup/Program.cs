@@ -85,7 +85,7 @@ internal sealed class SetupForm : Form
         {
             Text = uninstall
                 ? "移除悬浮窗、Codex 插件和安装记录。额度缓存与界面设置将保留。"
-                : "在桌面右下角实时显示 5 小时与每周 Codex 额度。",
+                : "在桌面右下角显示套餐实际返回的 Codex 额度窗口。",
             ForeColor = Color.FromArgb(100, 100, 97),
             AutoSize = true,
             Location = new Point(35, 70)
@@ -214,7 +214,7 @@ internal static class InstallerEngine
 {
     private const string PluginName = "codex-quota-monitor";
     private const string MarketplaceName = "personal";
-	private const string PluginVersion = "1.0.0+codex.20260925085329";
+	private const string PluginVersion = "1.0.1+codex.20260925101045";
     private const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\CodexQuotaMonitor";
 
     private static string Home => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);

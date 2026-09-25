@@ -31,9 +31,49 @@ internal sealed class AppServerClient : IAsyncDisposable
 
 	public async Task<QuotaSnapshot> ReadQuotaAsync(CancellationToken cancellationToken)
 	{
+		return await RetryAuthenticationFailureAsync(
+			() => ReadQuotaCoreAsync(cancellationToken),
+			() => RestartAndRefreshAccountAsync(cancellationToken));
+	}
+
+	private async Task<QuotaSnapshot> ReadQuotaCoreAsync(CancellationToken cancellationToken)
+	{
 		await EnsureStartedAsync(cancellationToken);
 		Task<JsonElement> task = RequestCoreAsync("account/rateLimits/read", null, cancellationToken);
 		return QuotaParser.Parse(usageResult: await ReadUsageBestEffortAsync(cancellationToken), rateResult: await task, now: DateTimeOffset.Now);
+	}
+
+	private async Task RestartAndRefreshAccountAsync(CancellationToken cancellationToken)
+	{
+		StopProcess();
+		await EnsureStartedAsync(cancellationToken);
+		await RequestCoreAsync("account/read", new
+		{
+			refreshToken = true
+		}, cancellationToken);
+	}
+
+	internal static async Task<T> RetryAuthenticationFailureAsync<T>(Func<Task<T>> operation, Func<Task> recover)
+	{
+		try
+		{
+			return await operation();
+		}
+		catch (Exception exception) when (IsAuthenticationFailure(exception))
+		{
+			await recover();
+			return await operation();
+		}
+	}
+
+	internal static bool IsAuthenticationFailure(Exception exception)
+	{
+		string text = exception.ToString();
+		return text.Contains("authentication", StringComparison.OrdinalIgnoreCase)
+			|| text.Contains("unauthorized", StringComparison.OrdinalIgnoreCase)
+			|| text.Contains("not logged", StringComparison.OrdinalIgnoreCase)
+			|| text.Contains("login", StringComparison.OrdinalIgnoreCase)
+			|| text.Contains("401", StringComparison.OrdinalIgnoreCase);
 	}
 
 	private async Task<JsonElement?> ReadUsageBestEffortAsync(CancellationToken cancellationToken)
@@ -97,7 +137,7 @@ internal sealed class AppServerClient : IAsyncDisposable
 					{
 						name = "codex_quota_monitor",
 						title = "Codex Quota Monitor",
-						version = "1.0.0"
+						version = "1.0.1"
 					}
 				}, cancellationToken, skipStartCheck: true);
 				await SendAsync(new

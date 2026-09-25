@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace CodexQuotaMonitor;
@@ -49,6 +50,24 @@ internal static class Program
 			Assert(quotaSnapshot.DailyUsage.Single().Tokens == 20660160, "daily usage");
 			Assert(DisplayText.WindowName(quotaSnapshot.ShortWindow, "") == "5 小时", "window label");
 			Assert(AvatarIconProvider.FindAvatarUrlInText("x https://cdn.auth0.com/avatars/ff.png y") == "https://cdn.auth0.com/avatars/ff.png", "avatar url");
+			int attempts = 0;
+			int recoveries = 0;
+			string recoveryResult = AppServerClient.RetryAuthenticationFailureAsync(
+				() =>
+				{
+					attempts++;
+					if (attempts == 1)
+					{
+						throw new InvalidOperationException("authentication required");
+					}
+					return Task.FromResult("online");
+				},
+				() =>
+				{
+					recoveries++;
+					return Task.CompletedTask;
+				}).GetAwaiter().GetResult();
+			Assert(recoveryResult == "online" && attempts == 2 && recoveries == 1, "authentication recovery");
 			string telemetryRoot = Path.Combine(Path.GetTempPath(), "CodexQuotaMonitor-SelfTest-" + Guid.NewGuid().ToString("N"));
 			Directory.CreateDirectory(telemetryRoot);
 			try
