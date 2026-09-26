@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.3 — 2026-09-26
+
+- Removed the Pro single-window note from layout A.
+- Enlarged and centered the right-side `PRO` label in layout C.
+- Updated the matching README screenshots without changing README copy.
+
 ## v1.0.2 — 2026-09-25
 
 - Removed the two redundant gray explanatory lines from the Pro single-window HUD while retaining the green `PRO` label.

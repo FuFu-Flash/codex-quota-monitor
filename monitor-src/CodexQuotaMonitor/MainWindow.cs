@@ -604,13 +604,14 @@ internal sealed class MainWindow : Window
 			}
 		};
 		Grid element = CreateMetricRow(_snapshot.ShortWindow, "5 小时");
-		Grid element2 = _snapshot.ShortWindow != null && _snapshot.LongWindow == null
-			? CreateSingleWindowNote()
-			: CreateMetricRow(_snapshot.LongWindow, "每周");
 		Grid.SetRow(element, 0);
-		Grid.SetRow(element2, 1);
 		obj.Children.Add(element);
-		obj.Children.Add(element2);
+		if (_snapshot.ShortWindow == null || _snapshot.LongWindow != null)
+		{
+			Grid element2 = CreateMetricRow(_snapshot.LongWindow, "每周");
+			Grid.SetRow(element2, 1);
+			obj.Children.Add(element2);
+		}
 		Grid grid = new Grid
 		{
 			Margin = new Thickness(0.0, 11.0, 0.0, 0.0)
@@ -641,30 +642,6 @@ internal sealed class MainWindow : Window
 		Grid.SetRow(grid, 2);
 		obj.Children.Add(grid);
 		return obj;
-	}
-
-	private Grid CreateSingleWindowNote()
-	{
-		Grid grid = new Grid
-		{
-			Height = 34.0,
-			Margin = new Thickness(0.0, 0.0, 0.0, 3.0)
-		};
-		grid.Children.Add(new Border
-		{
-			CornerRadius = new CornerRadius(7.0),
-			Background = _palette.Track
-		});
-		StackPanel content = new StackPanel
-		{
-			Orientation = System.Windows.Controls.Orientation.Horizontal,
-			VerticalAlignment = VerticalAlignment.Center,
-			Margin = new Thickness(9.0, 0.0, 9.0, 0.0)
-		};
-		content.Children.Add(Text(PlanBadgeText() ?? "当前套餐", 8.0, _palette.Green, FontWeights.Bold));
-		content.Children.Add(Text("仅返回一个额度窗口", 8.0, _palette.Muted, FontWeights.Normal, new Thickness(7.0, 0.0, 0.0, 0.0)));
-		grid.Children.Add(content);
-		return grid;
 	}
 
 	private Grid CreateMetricRow(RateWindow? window, string fallback)
@@ -939,7 +916,11 @@ internal sealed class MainWindow : Window
 		};
 		if (_snapshot.ShortWindow != null && _snapshot.LongWindow == null)
 		{
-			stackPanel2.Children.Add(Text(PlanBadgeText() ?? "单窗口", 19.0, _palette.Green, FontWeights.Bold));
+			border.Padding = new Thickness(0.0);
+			stackPanel2.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+			TextBlock planLabel = Text(PlanBadgeText() ?? "单窗口", 28.0, _palette.Green, FontWeights.Bold);
+			planLabel.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+			stackPanel2.Children.Add(planLabel);
 		}
 		else
 		{

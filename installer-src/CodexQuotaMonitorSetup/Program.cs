@@ -214,7 +214,7 @@ internal static class InstallerEngine
 {
     private const string PluginName = "codex-quota-monitor";
     private const string MarketplaceName = "personal";
-	private const string PluginVersion = "1.0.2+codex.20260925120130";
+	private const string PluginVersion = "1.0.3+codex.20260926044229";
     private const string UninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\CodexQuotaMonitor";
 
     private static string Home => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);

@@ -137,7 +137,7 @@ internal sealed class AppServerClient : IAsyncDisposable
 					{
 						name = "codex_quota_monitor",
 						title = "Codex Quota Monitor",
-						version = "1.0.2"
+						version = "1.0.3"
 					}
 				}, cancellationToken, skipStartCheck: true);
 				await SendAsync(new
